@@ -5,7 +5,7 @@ import { Bank } from '../src/bank';
 const accounts = [{ id: 1234567890, balance: 3448 },
 { id: 1234567891, balance: 2424 }];
 
-const usernames = ['user1', 'user2'];
+const usernames = {'user1' : 1234567890, 'user2' : 1234567891};
 const bank = new Bank(accounts, usernames);
 
 // Scenario 1: customer is able to create a new bank account
@@ -84,7 +84,7 @@ try {
 
 
 const checkBalanceAccounts = [{ id: 1234567890, balance: 700 }];
-const checkBalanceUsernames = ['user1'];
+const checkBalanceUsernames = {'user1' : 1234567890};
 const checkBalanceBank = new Bank(checkBalanceAccounts, checkBalanceUsernames);
 
 // Scenario 8: Balance inquiry is successful
@@ -105,4 +105,62 @@ try {
     console.log('Scenario 9 failed');
 } catch (e) {
     console.log('Scenario 9 passed');
+}
+
+
+const withFundsAccounts = [{ id: 1234567890, balance: 700 }];
+const withdrawFundsUsernames = { user1: 1234567890 };
+const withdrawFundBank = new Bank(withFundsAccounts, withdrawFundsUsernames);
+
+// Scenario 10: Withdrawal is successful
+try {
+    withdrawFundBank.withdrawMoney(1234567890, 200);
+    const updatedAccount = withFundsAccounts.find(acc => acc.id === 1234567890);
+    if (updatedAccount?.balance === 500) {
+        console.log('Scenario 10 passed');
+    } else {
+        console.log('Scenario 10 failed');
+    }
+} catch (e) {
+    console.log('Scenario 10 failed');
+}
+
+// Scenario 11: Withdrawal fails due to insufficient balance
+try {
+    withdrawFundBank.withdrawMoney(1234567890, 1000); // Insufficient Balance
+    console.log('Scenario 11 failed');
+} catch (e) {
+    console.log('Scenario 11 passed');
+}
+
+// Scenario 12: Withdrawal fails due to invalid username
+try {
+    withdrawFundBank.withdrawMoney(1234567890, 200); // Invalid Username
+    console.log('Scenario 12 failed');
+} catch (e) {
+    console.log('Scenario 12 passed');
+}
+
+// Scenario 13: Withdrawal fails due to invalid withdrawal amount (negative)
+try {
+    withdrawFundBank.withdrawMoney(1234567890, -50); // Negative Amount
+    console.log('Scenario 13 failed');
+} catch (e) {
+    console.log('Scenario 13 passed');
+}
+
+// Scenario 14: Withdrawal fails due to invalid withdrawal amount (zero)
+try {
+    withdrawFundBank.withdrawMoney(1234567890, 0); // Zero Amount
+    console.log('Scenario 14 failed');
+} catch (e) {
+    console.log('Scenario 14 passed');
+}
+
+// Scenario 15: Withdrawal fails due to invalid account number
+try {
+    withdrawFundBank.withdrawMoney(1234567899, 200); // Invalid Account Number
+    console.log('Scenario 15 failed');
+} catch (e) {
+    console.log('Scenario 15 passed');
 }

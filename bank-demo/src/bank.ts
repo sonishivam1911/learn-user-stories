@@ -9,7 +9,7 @@ import { BankType, AccountType } from './types';
 export class Bank implements BankType {
 
     private accounts: AccountType[] = [];
-    private usernames: string[] = [];
+    private usernames: { [key: string]: number } = {};
 
     /**
      * 
@@ -17,7 +17,7 @@ export class Bank implements BankType {
      * @param usernames - a list bank verified usernames
      * @returns a new Bank object
      */
-    public constructor(accounts: AccountType[], usernames: string[]) {
+    public constructor(accounts: AccountType[], usernames: { [key: string]: number }) {
         this.accounts = accounts;
         this.usernames = usernames;
     }
@@ -28,7 +28,7 @@ export class Bank implements BankType {
      * @returns true if the username exists in the bank, false otherwise
      */
     private isUsernameExists(username: string): boolean {
-        return this.usernames.includes(username);
+        return this.usernames.hasOwnProperty(username);
     }
 
     /**
@@ -77,7 +77,12 @@ export class Bank implements BankType {
         }
 
         this.accounts.push(newAccount);
+        this.usernames[username] = accountNumber;
         return newAccount;
+    }
+
+    private isUsernameValid(username: string, accountNumber: number): boolean {
+        return this.usernames[username] === accountNumber;
     }
 
 
@@ -85,25 +90,44 @@ export class Bank implements BankType {
      * Deposits money into an existing bank account.
      * @param accountNumber - The unique ID of the bank account.
      * @param amount - The amount of money to be deposited.
-     * @throws Error if the account does not exist or if the deposit amount is invalid.
+     * @throws Error if the username or account does not exist, or if the deposit amount is invalid.
      */
     public depositMoney(accountNumber: number, amount: number): void {
         if (amount <= 0) throw new Error('Invalid deposit amount');
+        // if (!this.isUsernameValid(username, accountNumber)) throw new Error('Invalid username or account number');
         const account = this.findAccount(accountNumber);
         if (!account) throw new Error('Account not found');
         account.balance += amount; // Update balance
     }
 
+    
     /**
      * Checks the balance of an existing bank account.
      * @param accountNumber - The unique ID of the bank account.
      * @returns The current balance of the bank account.
-     * @throws Error if the account does not exist.
-     */
+     * @throws Error if the username or account does not exist.
+    */
     public checkBalance(accountNumber: number): number {
+        // if (!this.isUsernameValid(username, accountNumber)) throw new Error('Invalid username or account number');
         const account = this.findAccount(accountNumber);
         if (!account) throw new Error('Account not found');
         return account.balance;
     }
+
     
+    /**
+     * Withdraws money from an existing bank account.
+     * @param accountNumber - The unique ID of the bank account.
+     * @param amount - The amount of money to be withdrawn.
+     * @throws Error if the username or account does not exist, if the withdrawal amount is invalid, or if there are insufficient funds.
+     */
+    public withdrawMoney(accountNumber: number, amount: number): void {
+        if (amount <= 0) throw new Error('Invalid withdrawal amount');
+        // if (!this.isUsernameValid(username, accountNumber)) throw new Error('Invalid username or account number');
+        const account = this.findAccount(accountNumber);
+        if (!account) throw new Error('Account not found');
+        if (account.balance < amount) throw new Error('Insufficient funds');
+        account.balance -= amount; // Deduct balance
+    }    
+
 }
