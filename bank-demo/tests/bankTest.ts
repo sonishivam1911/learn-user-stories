@@ -81,3 +81,28 @@ try {
 } catch (e) {
     console.log('Scenario 7 passed');
 }
+
+
+const checkBalanceAccounts = [{ id: 1234567890, balance: 700 }];
+const checkBalanceUsernames = ['user1'];
+const checkBalanceBank = new Bank(checkBalanceAccounts, checkBalanceUsernames);
+
+// Scenario 8: Balance inquiry is successful
+try {
+    const balance = checkBalanceBank.checkBalance(1234567890);
+    if (balance === 700) {
+        console.log('Scenario 8 passed');
+    } else {
+        console.log('Scenario 8 failed');
+    }
+} catch (e) {
+    console.log('Scenario 8 failed');
+}
+
+// Scenario 9: Balance inquiry fails due to invalid account number
+try {
+    checkBalanceBank.checkBalance(1234567899); // Invalid Account Number
+    console.log('Scenario 9 failed');
+} catch (e) {
+    console.log('Scenario 9 passed');
+}
