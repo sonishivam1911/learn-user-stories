@@ -44,3 +44,40 @@ try {
 catch(e) {
     console.log('Scenario 3 passed');
 }
+
+
+// Scenario 4: Deposit is successful
+try {
+    bank.depositMoney(1234567890, 200);
+    const updatedAccount = accounts.find(acc => acc.id === 1234567890);
+    if (updatedAccount?.balance === 3448 + 200) {
+        console.log('Scenario 4 passed');
+    } else {
+        console.log('Scenario 4 failed');
+    }
+} catch (e) {
+    console.log('Scenario 4 failed');
+}
+
+// Scenario 5: Deposit fails due to invalid account number
+try {
+    bank.depositMoney(1234567899, 200); // Invalid Account Number
+    console.log('Scenario 5 failed');
+} catch (e) {
+    console.log('Scenario 5 passed');
+}
+
+// Scenario 6: Deposit fails due to invalid deposit amount
+try {
+    bank.depositMoney(1234567890, -50); // Invalid Amount
+    console.log('Scenario 6 failed');
+} catch (e) {
+    console.log('Scenario 6 passed');
+}
+
+try {
+    bank.depositMoney(1234567890, 0); // Zero Amount
+    console.log('Scenario 7 failed');
+} catch (e) {
+    console.log('Scenario 7 passed');
+}
