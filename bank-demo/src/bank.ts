@@ -14,7 +14,7 @@ export class Bank implements BankType {
     /**
      * 
      * @param accounts - a list of accounts to be stored in the bank
-     * @param usernames - a list bank verified usernames
+     * @param usernames - a dictionary object mapping usernames to account number
      * @returns a new Bank object
      */
     public constructor(accounts: AccountType[], usernames: { [key: string]: number }) {
@@ -81,9 +81,6 @@ export class Bank implements BankType {
         return newAccount;
     }
 
-    private isUsernameValid(username: string, accountNumber: number): boolean {
-        return this.usernames[username] === accountNumber;
-    }
 
 
     /**
@@ -94,7 +91,6 @@ export class Bank implements BankType {
      */
     public depositMoney(accountNumber: number, amount: number): void {
         if (amount <= 0) throw new Error('Invalid deposit amount');
-        // if (!this.isUsernameValid(username, accountNumber)) throw new Error('Invalid username or account number');
         const account = this.findAccount(accountNumber);
         if (!account) throw new Error('Account not found');
         account.balance += amount; // Update balance

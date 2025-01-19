@@ -133,20 +133,13 @@ try {
     console.log('Scenario 11 passed');
 }
 
-// Scenario 12: Withdrawal fails due to invalid username
+
+// Scenario 12: Withdrawal fails due to invalid withdrawal amount (negative)
 try {
-    withdrawFundBank.withdrawMoney(1234567890, 200); // Invalid Username
+    withdrawFundBank.withdrawMoney(1234567890, -50); // Negative Amount
     console.log('Scenario 12 failed');
 } catch (e) {
     console.log('Scenario 12 passed');
-}
-
-// Scenario 13: Withdrawal fails due to invalid withdrawal amount (negative)
-try {
-    withdrawFundBank.withdrawMoney(1234567890, -50); // Negative Amount
-    console.log('Scenario 13 failed');
-} catch (e) {
-    console.log('Scenario 13 passed');
 }
 
 // Scenario 14: Withdrawal fails due to invalid withdrawal amount (zero)
